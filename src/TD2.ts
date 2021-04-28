@@ -21,28 +21,35 @@ export class WotDevice {
 				properties: {
 					AcousticTomopraphy: {
 						type: "integer",
-                        unit: "hertz",
+						unit: "hertz",
 						description: "current Acoustic Tomography in Hertz",
+						observable: false,
+						readOnly: true
+					},
+					AcousticEnvironment: {
+						type: "integer",
+						unit: "hertz",
+						description: "current Acoustic Environment in Hertz",
 						observable: false,
 						readOnly: true
 					},
 					GeoPositioning: {
 						type: "integer",
-                        unit: "coordinates", 
+						unit: "coordinates",
 						description: "current Geo-Positioning in coordinates",
 						observable: false,
 						readOnly: true
 					},
 					OceanGraphicPoint: {
 						type: "integer",
-                        unit: "coordinates",
+						unit: "coordinates",
 						description: "current Acoustic Environment in Hertz",
 						observable: false,
 						readOnly: true
 					}
 				}
 			}
-        ).then((exposedThing)=>{
+		).then((exposedThing) => {
 			this.thing = exposedThing;
 			this.td = exposedThing.getThingDescription();
 		    this.add_properties();
@@ -74,6 +81,9 @@ export class WotDevice {
         //Random values generated to the properties to emit
         setInterval(() => {
 			this.thing.writeProperty("AcousticTomopraphy", Math.random().toString()); //replace quotes with the initial value
+		}, 1000);
+		setInterval(() => {
+			this.thing.writeProperty("AcousticEnvironment", Math.random().toString()); //replace quotes with the initial value
 		}, 1000);
 		setInterval(() => {
 			this.thing.writeProperty("GeoPositioning", Math.random().toString()); //replace quotes with the initial value
