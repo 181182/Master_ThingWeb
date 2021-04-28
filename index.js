@@ -1,4 +1,4 @@
-//Where your concrete implementation is included
+//Implementation of the Thing 
 TD1 = require("./dist/TD1.js").WotDevice
 TD2 = require("./dist/TD2.js").WotDevice
 TD3 = require("./dist/TD3.js").WotDevice
@@ -15,28 +15,24 @@ const TD_DIRECTORY = ""
 
 
 Servient = require("@node-wot/core").Servient
-//Importing the required bindings
+//Importing of the bindings
 HttpServer = require("@node-wot/binding-http").HttpServer
-//CoapServer = require("@node-wot/binding-coap").CoapServer
-//MqttBrokerServer = require("@node-wot/binding-mqtt").MqttBrokerServer
 WebsocketServer = require("@node-wot/binding-websockets").WebSocketServer
 
 //Creating the instances of the binding servers
 var httpServer = new HttpServer({port: 8080});
 var websocketServer = new WebsocketServer({port: 8081});
-//var coapServer = new CoapServer({port: 5683});
-//var mqttserver = new MqttBrokerServer("test.mosquitto.org"); //change it according to the broker address
 
 
 //Building the servient object
 var servient = new Servient();
-//Adding different bindings to the server
+//Adding the different bindings to the server
 servient.addServer(httpServer);
 servient.addServer(websocketServer);
-//servient.addServer(mqttServer);
 
+//Starting the servients
 servient.start().then((WoT) => {
-    td1 = new TD1(WoT, TD_DIRECTORY); // you can change the wotDevice to something that makes more sense
+    td1 = new TD1(WoT, TD_DIRECTORY); 
     td2 = new TD2(WoT, TD_DIRECTORY);
     td3 = new TD3(WoT, TD_DIRECTORY);
     td4 = new TD4(WoT, TD_DIRECTORY);

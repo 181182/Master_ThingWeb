@@ -2,8 +2,6 @@ import * as WoT from "wot-typescript-definitions"
 
 var request = require('request');
 
-//const Ajv = require('ajv');
-//var ajv = new Ajv();
 
 export class WotDevice {
     public thing: WoT.ExposedThing;
@@ -13,8 +11,8 @@ export class WotDevice {
     constructor(WoT: WoT.WoT, tdDirectory?: string) {
         //create WotDevice as a server
         this.WoT = WoT;
+		//Handmade thing descriptor
         this.WoT.produce(
-            //fill in the empty quotation marks
             {
 				"@context": [
 					"https://www.w3.org/2019/wot/td/v1",
@@ -54,12 +52,6 @@ export class WotDevice {
 						observable: false,
 						readOnly: true
 					}
-					// GasLeakage: {
-					//     type: "boolean",
-					//     description: "current status on Gas Leakage",
-					//     observable: false,
-					//     readOnly: true
-					// }
 				},
 				events: {
 					GasLeakage: {
@@ -78,6 +70,7 @@ export class WotDevice {
         });
     }
     
+	//Registering Thing Descriptor for the servient
     public register(directory: string) {
         console.log("Registering TD in directory: " + directory)
         request.post(directory, {json: this.thing.getThingDescription()}, (error, response, body) => {
@@ -92,54 +85,26 @@ export class WotDevice {
             }
         });
     }
-
-    // private myPropertyHandler(){
-	// 	return new Promise((resolve, reject) => {
-	// 		// read something
-	// 		resolve();
-	// 	});
-    // }
-
-    // private myActionHandler(inputData){
-	// 	return new Promise((resolve, reject) => {
-	// 		// do something with inputData
-	// 		resolve();
-	// 	});	
-    // }
-
     private add_properties() {
-        //fill in add properties
+        //Random values generated to the properties to emit
         setInterval(() => {
-			this.thing.writeProperty("CO2", Math.random().toString()); //replace quotes with the initial value
+			this.thing.writeProperty("CO2", Math.random().toString()); 
 		}, 1000);
 		setInterval(() => {
-			this.thing.writeProperty("Temperature", Math.random().toString()); //replace quotes with the initial value
+			this.thing.writeProperty("Temperature", Math.random().toString());
 		}, 1000);
 		setInterval(() => {
-			this.thing.writeProperty("pH", Math.random().toString()); //replace quotes with the initial value
+			this.thing.writeProperty("pH", Math.random().toString()); 
 		}, 1000);
 		setInterval(() => {
-			this.thing.writeProperty("Gravity", Math.random().toString()); //replace quotes with the initial value
+			this.thing.writeProperty("Gravity", Math.random().toString());
 		}, 1000);
 		setInterval(() => {
-			this.thing.writeProperty("Salinity", Math.random().toString()); //replace quotes with the initial value
+			this.thing.writeProperty("Salinity", Math.random().toString());
 		}, 1000);
     }
-
-    // private add_actions() {
-    //     //fill in add actions
-    //     this.thing.setActionHandler("myAction",(inputData) => {            
-    //      	return new Promise((resolve, reject) => {
-	//             if (!ajv.validate(this.td.actions.myAction.input, inputData)) {
-	//                 reject(new Error ("Invalid input"));
-	//             }
-	//             else {
-	//                 resolve(this.myActionHandler(inputData));
-	//             }
-	//         });
-    //     });
-    // }
     private add_events() {
+		//Interval set for when the event will emit
 		setInterval(() => {
 			if (Math.floor(Math.random() * 101) > 50) {
 				this.thing.emitEvent("GasLeakage", true);

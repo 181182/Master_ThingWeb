@@ -1,10 +1,6 @@
 import * as WoT from "wot-typescript-definitions"
 
 var request = require('request');
-
-//const Ajv = require('ajv');
-//var ajv = new Ajv();
-
 export class WotDevice {
     public thing: WoT.ExposedThing;
     public WoT: WoT.WoT;
@@ -13,8 +9,8 @@ export class WotDevice {
     constructor(WoT: WoT.WoT, tdDirectory?: string) {
         //create WotDevice as a server
         this.WoT = WoT;
+		//Handmade thing descriptor
         this.WoT.produce(
-            //fill in the empty quotation marks
             {
 				"@context": [
 					"https://www.w3.org/2019/wot/td/v1",
@@ -55,6 +51,7 @@ export class WotDevice {
         });
     }
     
+	//Registering Thing Descriptor for the servient
     public register(directory: string) {
         console.log("Registering TD in directory: " + directory)
         request.post(directory, {json: this.thing.getThingDescription()}, (error, response, body) => {
@@ -70,7 +67,7 @@ export class WotDevice {
         });
     }
     private add_properties() {
-        //fill in add properties
+        //Random values generated to the properties to emit
         setInterval(() => {
 			this.thing.writeProperty("PipelineVibration", Math.random().toString()); //replace quotes with the initial value
 		}, 1000);
@@ -79,6 +76,7 @@ export class WotDevice {
 		}, 1000);
     }
     private add_events() {
+		//Interval set for when the event will emit
 		setInterval(() => {
 			if (Math.floor(Math.random() * 101) > 50) {
 				this.thing.emitEvent("GasLeakage", true);

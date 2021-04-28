@@ -1,10 +1,6 @@
 import * as WoT from "wot-typescript-definitions"
 
 var request = require('request');
-
-//const Ajv = require('ajv');
-//var ajv = new Ajv();
-
 export class WotDevice {
     public thing: WoT.ExposedThing;
     public WoT: WoT.WoT;
@@ -12,8 +8,8 @@ export class WotDevice {
     constructor(WoT: WoT.WoT, tdDirectory?: string) {
         //create WotDevice as a server
         this.WoT = WoT;
+		//Handmade thing descriptor
         this.WoT.produce(
-            //fill in the empty quotation marks
             {
 				"@context": [
 					"https://www.w3.org/2019/wot/td/v1",
@@ -50,13 +46,13 @@ export class WotDevice {
 			this.thing = exposedThing;
 			this.td = exposedThing.getThingDescription();
 		    this.add_properties();
-	//		this.add_actions();
 			this.add_events();
 			this.thing.expose();
 			if (tdDirectory) { this.register(tdDirectory); }
         });
     }
-    
+
+    //Registering Thing Descriptor for the servient
     public register(directory: string) {
         console.log("Registering TD in directory: " + directory)
         request.post(directory, {json: this.thing.getThingDescription()}, (error, response, body) => {
@@ -72,24 +68,10 @@ export class WotDevice {
         });
     }
 
-    // private myPropertyHandler(){
-	// 	return new Promise((resolve, reject) => {
-	// 		// read something
-	// 		resolve();
-	// 	});
-    // }
-
-    // private myActionHandler(inputData){
-	// 	return new Promise((resolve, reject) => {
-	// 		// do something with inputData
-	// 		resolve();
-	// 	});	
-    // }
-
 
 
     private add_properties() {
-        //fill in add properties
+        //Random values generated to the properties to emit
         setInterval(() => {
 			this.thing.writeProperty("AcousticTomopraphy", Math.random().toString()); //replace quotes with the initial value
 		}, 1000);
@@ -100,21 +82,7 @@ export class WotDevice {
 			this.thing.writeProperty("OceanGraphicPoint", Math.random().toString()); //replace quotes with the initial value
 		}, 1000);
     }
-
-    // private add_actions() {
-    //     //fill in add actions
-    //     this.thing.setActionHandler("myAction",(inputData) => {            
-    //      	return new Promise((resolve, reject) => {
-	//             if (!ajv.validate(this.td.actions.myAction.input, inputData)) {
-	//                 reject(new Error ("Invalid input"));
-	//             }
-	//             else {
-	//                 resolve(this.myActionHandler(inputData));
-	//             }
-	//         });
-    //     });
-    // }
     private add_events() {
-		// can/should be removed, no need to add events anywhere, just emit them
+		//Placeholder for Events
     }
 }
